@@ -1,13 +1,23 @@
-<script setup>
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3 + Vite" />
+  <div>
+    <router-link to="/">跳转至首页</router-link>
+    <router-link to="/about">跳转至about</router-link>
+    <button @click="router.push('/')">跳转至首页</button>
+    <button @click="goAbout">跳转到about</button>
+  </div>
+  <router-view></router-view>
 </template>
+
+<script setup>
+import { useRoute, useRouter } from 'vue-router';
+
+let route = useRoute();
+let router = useRouter();
+function goAbout() {
+  console.log(route, '====router');
+  router.push("/about")
+}
+</script>
 
 <style>
 #app {

@@ -7,6 +7,13 @@
 </template>
 
 <script setup>
+import * as api from '../api/index';
+
+import { onMounted } from 'vue';
+onMounted(async () => {
+  let result = await api.getHomePage();
+  console.log(result);
+})
 
 </script>
 <style lang='less' scoped>

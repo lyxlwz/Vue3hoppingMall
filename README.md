@@ -106,7 +106,7 @@ app.mount('#app')
 
 ##### Vite 安装按需加载插件 unplugin-vue-components
 ```shell
-npm install unplugin-vue-components -D
+$ npm install unplugin-vue-components -D
 ```
 
 ##### 修改 vite.config.js
@@ -145,3 +145,38 @@ export default defineConfig({
 [vite] new dependencies found: ant-design-vue/es, ant-design-vue/es/button/style/css, updating...
 [vite] ✨ dependencies updated, reloading page...
 ```
+
+## 使用less
+
+### 安装 less
+```shell
+$ npm i less-loader less --save-dev
+```
+
+### 修改 vite.config.js
+```javascript
+...
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  ...
+  resolve: {
+    extensions: ['.js', '.vue', '.json'],
+    // 配置别名
+    alias: {
+      '@': '/src/',
+    },
+  },
+  css: {
+    // css预处理器
+    preprocessorOptions: {
+      less: {
+        charset: false,
+        additionalData: '@import "./src/assets/style/global.less";',
+      },
+    },
+  }
+})
+```
+
+### 使用就不写了

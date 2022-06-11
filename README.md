@@ -36,3 +36,112 @@ npm install vue-router@4
 ```shell
 npm install vuex@next --save
 ```
+
+## AntDesing 组件库
+
+### 安装AntDesing 组件库
+```shell
+$ npm i --save ant-design-vue
+```
+
+### 注册组件
+> 如果使用 Vue 默认的模板语法，需要注册组件后方可使用，有如下两种方式常用注册组件：
+> 
+> 还有一种 局部注册 不推荐就不写了
+
+
+#### 在 main.js 全局完整注册
+```javascript
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router'
+import store from './store'
+
+let app = createApp(App)
+app.use(router)
+app.use(store)
+
+//ant-design 全局完整注册
+import Antd from 'ant-design-vue';
+import 'ant-design-vue/dist/antd.css';
+app.use(Antd)
+
+app.mount('#app')
+```
+> **以上代码便完成了 Antd 的全局注册。需要注意的是，样式文件需要单独引入。**
+
+
+#### 在 main.js 全局部分注册（按需加载）
+```javascript
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router'
+import store from './store'
+
+let app = createApp(App)
+app.use(router)
+app.use(store)
+
+/**
+ * ant-design 按需加载
+ * 
+ * 需要使用 按需加载的插件 来进行按需加载
+ * 
+ * Vue-cli 使用babel-plugin-import
+ * Vite 使用 unplugin-vue-components 
+ */
+//不使用
+// import Button from 'ant-design-vue/lib/button';
+// import 'ant-design-vue/lib/button/style'; // 或者 ant-design-vue/lib/button/style/css 加载 css 文件
+
+// 使用
+import { Button, message } from 'ant-design-vue';
+/* 会自动注册 Button 下的子组件, 例如 Button.Group */
+import 'ant-design-vue/es/message/style/css'; //vite只能用 ant-design-vue/es 而非 ant-design-vue/lib
+app.use(Button)
+app.config.globalProperties.$message = message;
+
+app.mount('#app')
+```
+
+##### Vite 安装按需加载插件 unplugin-vue-components
+```shell
+npm install unplugin-vue-components -D
+```
+
+##### 修改 vite.config.js
+```javascript
+// vite.config.js
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+
+import Components from 'unplugin-vue-components/vite'
+import { AntDesignVueResolver, } from 'unplugin-vue-components/resolvers'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [
+    /* ... */
+    vue(),
+    // your plugin installation
+    Components({
+      resolvers: [
+        AntDesignVueResolver(),
+      ],
+    })
+  ],
+  resolve: {
+    extensions: ['.js', '.vue', '.json'],
+    // 配置别名
+    alias: {
+      '@': '/src/',
+    },
+  },
+})
+```
+##### 使用组件 就不写了 （直接使用无需在任何地方导入组件）
+**第一次加载完成控制台会出现**
+```shell
+[vite] new dependencies found: ant-design-vue/es, ant-design-vue/es/button/style/css, updating...
+[vite] ✨ dependencies updated, reloading page...
+```

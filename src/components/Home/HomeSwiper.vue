@@ -108,7 +108,7 @@ function changeFn(from, to) {
 
       img {
         transform-origin: 0 100%;
-        transform: skew(0, 8deg);
+        transform: skew(0, 8deg); //负负得正
         border-radius: 20px;
       }
     }

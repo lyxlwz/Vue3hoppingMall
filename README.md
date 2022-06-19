@@ -180,3 +180,7 @@ export default defineConfig({
 ```
 
 ### 使用就不写了
+
+## git提交遇到的问题commit的文件大于100MB
+> 链接 https://docs.github.com/cn/repositories/working-with-files/managing-large-files/about-large-files-on-github
+> 根据 安装--> 配置

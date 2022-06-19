@@ -5,11 +5,14 @@ const store = createStore({
     return {
       count: 0,
       isFullScreen: false,
+      buyCarts: [],
     }
   },
   getters: {
     totalPrice(state) {
-      return state.count * 98.8;
+      return state.buyCarts.reduce((pre, now, list) => {
+        return pre + now.price * now.num;
+      }, 0)
     },
   },
   mutations: {
@@ -17,8 +20,20 @@ const store = createStore({
       // payload 是传过来的参数
       state.count += payload;
     },
-    setFullScreen(state,payload){
-        state.isFullScreen = payload
+    setFullScreen(state, payload) {
+      state.isFullScreen = payload
+    },
+    addBuyCarts(state, payload) {
+      state.buyCarts.push(payload);
+    },
+    addBuyCartsNum(state, payload) {
+      state.buyCarts[payload].num++;
+    },
+    minusBuyCartsNum(state, payload) {
+      state.buyCarts[payload].num--;
+      if (state.buyCarts[payload].num == 0) {
+        state.buyCarts.splice(payload, 1);
+      }
     },
   },
   actions: {

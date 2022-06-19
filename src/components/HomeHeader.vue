@@ -8,9 +8,9 @@
     <div class="logo" @click="router.push('/')">
       <img :src="getImageUrl('@/assets/logo.png')" alt="logo">
     </div>
-    <a-input-search v-model:value="value" placeholder="搜索商品和商品号" class="input-search" @search="onSearch" />
+    <a-input-search v-model:value="data.value" placeholder="搜索商品和商品号" class="input-search" @search="onSearch" />
 
-    <a-menu v-model:selectedKeys="current" mode="horizontal" class="menu" :theme="data.theme">
+    <a-menu v-model:selectedKeys="data.current" mode="horizontal" class="menu" :theme="data.theme">
       <a-menu-item key="help">
         <template #icon>
           <question-circle-outlined />
@@ -59,7 +59,7 @@ const store = useStore()
 const data = reactive({
   theme: 'light',
   value: '',
-  current: [],
+  current: ["help"],
 })
 
 const changeTheme = checked => {

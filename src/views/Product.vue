@@ -8,13 +8,34 @@
       <h1>
         <SketchOutlined></SketchOutlined>产品推荐
       </h1>
+      <div class="products">
+        <div class="prod-item" v-for="(prod, pDex) in data.products" :key="pDex" @click="changeModel(prod, pDex)"
+          :class="{ active: pDex == data.prodDex }">
+          <div class="prod-title">{{ prod.title }} </div>
+          <div class="img">
+            <img :src="prod.imgsrc" :alt="prod.title">
+          </div>
+          <!-- .stop 阻止向上传递 -->
+          <a-button type="primary" block @click.stop="addBuyCart(prod)">
+            <template #icon>
+              <ShoppingCartOutlined></ShoppingCartOutlined>
+            </template>
+            加入购物车
+          </a-button>
+        </div>
+      </div>
     </div>
   </div>
 
   <div class="scene-list" :class="{ hidden: store.state.isFullScreen }">
-    <h3>
+    <h1>
       <RadarChartOutlined></RadarChartOutlined>切换使用场景
-    </h3>
+    </h1>
+    <div class="scenes">
+      <div class="scene-item" v-for="(scene, sDex) in data.scenes" :key="sDex" @click="changeHdr(scene, sDex)">
+        <img :src="`./files/hdr/${scene}.jpg`" :alt="scene" :class="{ active: sDex == data.sceneDex }">
+      </div>
+    </div>
   </div>
 </template>
   
@@ -29,19 +50,38 @@
 import * as api from '../api/index';
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex'
-import { onMounted, reactive } from 'vue'
+import { onMounted, reactive, onBeforeUnmount } from 'vue'
 import Loading from '@/components/Loading'
-import { SketchOutlined, RadarChartOutlined } from '@ant-design/icons-vue';
+import { SketchOutlined, RadarChartOutlined, ShoppingCartOutlined } from '@ant-design/icons-vue';
 
 const route = useRoute()
 const store = useStore()
 const data = reactive({
-  product: [],
+  products: [],
+  scenes: [],
   isLoading: true,
+  prodDex: 0,
+  sceneDex: 0,
 })
+
+function changeModel(prod, pDex) {
+  data.prodDex = pDex
+}
+function addBuyCart(prod) {
+  let product = { ...prod, num: 1 }
+  store.commit('addBuyCarts', product);
+}
+
+function changeHdr(scene, sDex) {
+  data.sceneDex = sDex
+}
+
+
 onMounted(async () => {
   let result = await api.getProducts()
   data.isLoading = false
+  data.products = result.list;
+  data.scenes = result.hdr;
 
   console.log(result, '===result');
 })
@@ -57,6 +97,9 @@ window.addEventListener('mousewheel', (event) => {
   }
 })
 
+onBeforeUnmount(() => {
+  window.removeEventListener('touchmove');
+})
 </script>
   
 <style lang='less' scoped>
@@ -69,12 +112,64 @@ window.addEventListener('mousewheel', (event) => {
   z-index: 1000;
 
   transition: all 0.5s;
-  background-color: rgba(180, 161, 22, 0.8);
+  background-color: rgba(255, 255, 255, 0.8);
   top: 0;
+
+  h1 {
+    font-size: 20px;
+    font-weight: 900;
+    // padding: 10px 25px 0;
+  }
+
+  .products,
+  .scenes {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 .prod-list {
   left: 0;
+
+  h1 {
+    padding: 10px 25px 0;
+  }
+
+  .products {
+    .prod-item {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 250px;
+      background-color: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      margin: 20px 0;
+      box-shadow: 5px 5px 10px #666;
+      transition: all 0.3s;
+
+      &.active {
+        box-shadow: 5px 5px 10px #666, 0 0 20px red;
+      }
+
+      &:hover {
+        transform: translate(0px, -5px);
+        // background-color: orange;
+        box-shadow: 5px 5px 10px #666, 0 0 20px orangered;
+      }
+
+      img {
+        width: 190px;
+      }
+
+      .prod-title {
+        padding: 0 20px;
+      }
+    }
+  }
 }
 
 .prod-list.hidden {
@@ -83,6 +178,30 @@ window.addEventListener('mousewheel', (event) => {
 
 .scene-list {
   right: 0;
+
+  h1 {
+    padding: 0 30px;
+  }
+
+  .scene-item {
+    padding: 12px 0;
+
+    img {
+      width: 250px;
+      border-radius: 10px;
+      box-shadow: 5px 5px 10px #666;
+      transition: all 0.3s;
+
+      &.active {
+        box-shadow: 5px 5px 10px #666, 0 0 20px red;
+      }
+
+      &:hover {
+        transform: translate(0px, -5px);
+        box-shadow: 5px 5px 10px #666, 0 0 20px orangered;
+      }
+    }
+  }
 }
 
 .scene-list.hidden {

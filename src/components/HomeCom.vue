@@ -1,20 +1,32 @@
 <template>
-  <h1>首页</h1>
-  <ul>
-    <li v-for="(item, index) in hero" :key="index">
-      <h3>{{ item.category }}</h3>
-    </li>
-  </ul>
+  <div class="home-page">
+    <HomeSwiper :banner="data.banner"></HomeSwiper>
+  </div>
 </template>
 
 <script setup>
 import * as api from '../api/index';
+import HomeSwiper from './Home/HomeSwiper'
 
 import { reactive } from 'vue'
 
 let result = await api.getHomePage();
-let hero = reactive(result.hero);
+
+const data = reactive({
+  banner: result.banner,
+});
 console.log(result);
 </script>
+
 <style lang='less' scoped>
+.home-page {
+  /** 
+   * 如果 postion 为 fixed 需要设置 padding-top
+   * 否则为 stiky 不需要设置
+   */
+  padding-top: 80px;
+
+  position: relative;
+  height: 575px;
+}
 </style>

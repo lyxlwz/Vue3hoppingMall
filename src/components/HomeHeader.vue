@@ -75,6 +75,7 @@ const onSearch = () => {
   align-items: center;
 
   position: fixed;
+  // position: stiky;
   z-index: 1000000;
 
   width: 100%;

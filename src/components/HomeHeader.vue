@@ -1,5 +1,5 @@
 <template>
-  <div class="header theme" :class="data.theme">
+  <div class="header theme" :class="data.theme, { hidden: store.state.isFullScreen }">
     <div class="change-theme">
       <span>切换主题:</span>
       <a-switch :checked="data.theme === 'dark'" checked-children="Dark" un-checked-children="Light"
@@ -49,11 +49,13 @@
 
 <script setup>
 import { useRoute, useRouter } from "vue-router";
+import { useStore } from 'vuex'
 import { defineComponent, ref, reactive } from 'vue';
 import { QuestionCircleOutlined, ShopOutlined, UserOutlined, ShoppingCartOutlined } from '@ant-design/icons-vue';
 import { getImageUrl } from "@/utils/resolveUrl"
 
 const router = useRouter();
+const store = useStore()
 const data = reactive({
   theme: 'light',
   value: '',
@@ -86,6 +88,8 @@ const onSearch = () => {
 
   padding: 0 20px;
 
+  transition: all 0.5s; //加一个过度的效果
+
   .change-theme {
     .switch-theme {
       margin-left: 10px;
@@ -113,5 +117,9 @@ const onSearch = () => {
     height: 80px;
     font-size: 16px;
   }
+}
+
+.header.hidden {
+  transform: translate(0, -100%);
 }
 </style>

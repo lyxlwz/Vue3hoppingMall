@@ -14,17 +14,17 @@
           <right-circle-outlined />
         </div>
       </template>
-      <div>
-        <h3>1</h3>
-      </div>
-      <div>
-        <h3>2</h3>
-      </div>
-      <div>
-        <h3>3</h3>
-      </div>
-      <div>
-        <h3>4</h3>
+      <div class="swiper-item" v-for="(item, index) in props.banner" :key="index">
+        <div class="swiper-box">
+          <div class="banner-left">
+            <h3 :style="{ color: item.text_color }">{{ item.desktop_sub_title || item.sub_title }}</h3>
+            <h1 :style="{ color: item.text_color }">{{ item.desktop_title || item.title }}</h1>
+          </div>
+          <div class="banner-right">
+            <img :src="`https://pixl.decathlon.com.cn/${item.picture_desktop}/banner.jpg`"
+              :alt="item.desktop_title || item.title">
+          </div>
+        </div>
       </div>
     </a-carousel>
   </div>
@@ -61,9 +61,58 @@ function changeFn(from, to) {
   height: 575px;
   // background-color: orangered;
   background-color: v-bind("data.bgColor");
-  transform-origin: 0 0;
+  transform-origin: 0 0; //左上角
   transform: skew(0, -8deg);
   transition: all 0.5s;
+}
+
+.swiper-item {
+  height: 575px;
+
+  .swiper-box {
+    display: flex;
+    min-width: 1200px;
+    justify-content: center;
+
+    .banner-left {
+      width: 340px;
+      padding-right: 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      margin-top: 100px;
+      text-align: right;
+    }
+
+    h3 {
+      font-size: 30px;
+      font-weight: 900;
+      margin: 0;
+      line-height: 40px;
+    }
+
+    h1 {
+      font-size: 60px;
+      font-weight: 900;
+      margin: 0;
+      line-height: 70px;
+    }
+
+    .banner-right {
+      margin-top: 45px;
+      transform-origin: 0 100%; //左下角
+      transform: skew(0, -8deg);
+      overflow: hidden;
+      border-radius: 20px;
+      border-bottom-right-radius: 80px;
+
+      img {
+        transform-origin: 0 100%;
+        transform: skew(0, 8deg);
+        border-radius: 20px;
+      }
+    }
+  }
 }
 
 /* For demo */

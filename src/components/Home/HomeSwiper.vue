@@ -1,6 +1,8 @@
 <template>
   <div class="home-swiper">
-    <div class="swiper-bg" :style="{ backgroundColor: data.bgColor }"></div>
+    <!-- <div class="swiper-bg" :style="{ backgroundColor: data.bgColor }"></div> -->
+    <!-- vue3.2中引入了 style v-bind 新特性 -->
+    <div class="swiper-bg"></div>
     <a-carousel arrows autoplay :beforeChange="changeFn">
       <template #prevArrow>
         <div class="custom-slick-arrow" style="left: 10px; z-index: 1">
@@ -35,6 +37,8 @@ import { reactive, defineProps } from 'vue'
 /**
  * defineProps 可导入也可不导入 
  * Vue3新版本中有了这个（编译宏）不需要进行导入
+ * 
+ * [@vue/compiler-sfc] `defineProps` is a compiler macro and no longer needs to be imported.
  */
 const props = defineProps({
   banner: Array,
@@ -55,7 +59,8 @@ function changeFn(from, to) {
   display: block;
   width: 100%;
   height: 575px;
-  background-color: orangered;
+  // background-color: orangered;
+  background-color: v-bind("data.bgColor");
   transform-origin: 0 0;
   transform: skew(0, -8deg);
   transition: all 0.5s;

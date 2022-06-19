@@ -51,7 +51,7 @@ console.log(result);
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding-bottom: 40px;
+    // padding-bottom: 40px;
 
     h1 {
       font-size: 30px;

@@ -4,6 +4,7 @@ const store = createStore({
   state() {
     return {
       count: 0,
+      isFullScreen: false,
     }
   },
   getters: {
@@ -15,6 +16,9 @@ const store = createStore({
     increment(state, payload) {
       // payload 是传过来的参数
       state.count += payload;
+    },
+    setFullScreen(state,payload){
+        state.isFullScreen = payload
     },
   },
   actions: {

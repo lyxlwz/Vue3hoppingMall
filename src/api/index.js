@@ -24,3 +24,11 @@ export const getHomePage = (params) => {
     params,
   })
 }
+
+export const getProducts = (params) => {
+  return request({
+    method: 'GET',
+    url: '/products',
+    params,
+  })
+}

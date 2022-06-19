@@ -18,7 +18,7 @@
 
 <script setup>
 import { onMounted, defineAsyncComponent } from 'vue';
-import Loading from '../components/Loading.vue'
+import Loading from '@/components/Loading'
 
 const HomeAsync = defineAsyncComponent(() => import('../components/HomeCom'))
 

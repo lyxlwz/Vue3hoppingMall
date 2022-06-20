@@ -69,7 +69,21 @@ function changeModel(prod, pDex) {
 }
 function addBuyCart(prod) {
   let product = { ...prod, num: 1 }
-  store.commit('addBuyCarts', product);
+  // 判断商品是否存在存在就累加，可以用es6 some
+  let index = 0
+  let isExist = store.state.buyCarts.some((item, i) => {
+    if (item.id == product.id) {
+      index = i
+      return true
+    } else {
+      return false
+    }
+  })
+  if (isExist) {
+    store.commit('addBuyCartsNum', index)
+  } else {
+    store.commit('addBuyCarts', product);
+  }
 }
 
 function changeHdr(scene, sDex) {

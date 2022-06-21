@@ -2,6 +2,8 @@
 import * as THREE from "three";
 //2. 引入RGBELoader 加载器
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
+// 4. 引入轨道控制器（控制器的一种）-----围绕物体进行查看
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 
 // 3.构建需要的3d的类
 class Base3d {
@@ -21,6 +23,7 @@ class Base3d {
     this.initScene(); //初始化场景
     this.initCamera(); //初始化照相机
     this.initRenderer(); //初始化渲染器
+    this.initControls(); //初始化控制器
   }
   initScene() {
     this.scene = new THREE.Scene(); //初始化场景
@@ -56,9 +59,21 @@ class Base3d {
     this.renderer.setPixelRatio(window.devicePixelRatio)
     // 渲染的尺寸大小
     this.renderer.setSize(window.innerWidth, window.innerHeight);
+    // 色调映射 ACESFilmicToneMapping--电影级别的
+    this.renderer.toneMapping = THREE.ACESFilmicToneMapping
+    //曝光程度
+    this.renderer.toneMappingExposure = 3
     // 渲染的画面挂载到元素上
-    console.log(this.container);
     this.container.appendChild(this.renderer.domElement);
+  }
+  initControls() {
+    /**
+     * 初始化控制器
+     * 
+     * 第一个参数为 摄像头
+     * 第二个参数为 渲染器
+     */
+    this.controls = new OrbitControls(this.camera, this.renderer.domElement)
   }
 
   //设置场景的背景

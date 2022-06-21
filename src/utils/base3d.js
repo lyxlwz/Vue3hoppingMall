@@ -16,6 +16,7 @@ class Base3d {
     this.renderer; //渲染器（Renderer）
 
     this.model; //模型
+    this.plate; //玻璃展台
 
     //初始化
     this.init()
@@ -29,6 +30,9 @@ class Base3d {
     this.initRenderer(); //初始化渲染器
     this.initControls(); //初始化控制器
     this.addMesh(); //添加模型/物体
+
+    //监听场景大小(页面尺寸)，调节渲染尺寸
+    window.addEventListener("resize", this.onWindowResize.bind(this))
   }
   initScene() {
     this.scene = new THREE.Scene(); //初始化场景
@@ -106,9 +110,14 @@ class Base3d {
         this.model = gltf.scene.children[0]
         this.scene.add(this.model)
         resolve(modelName + '模型添加成功')
+        if ('bag2.glb' == modelName && !this.plate) {
+          this.plate = gltf.scene.children[4];
+          this.scene.add(this.plate)
+        }
       })
     })
   }
+  //添加模型/物体
   addMesh() {
     this.setModel('bag2.glb')
   }
@@ -120,6 +129,16 @@ class Base3d {
   //渲染帧
   animate() {
     this.renderer.setAnimationLoop(this.render.bind(this))
+  }
+
+  //监听场景大小(页面尺寸)，调节渲染尺寸
+  onWindowResize() {
+    // 摄像机的比例
+    this.camera.aspect = window.innerWidth / window.innerHeight
+    // 矩阵转换 （三维转成二维进行展示）
+    this.camera.updateProjectionMatrix()
+    // 渲染的界面重新设置尺寸
+    this.renderer.setSize(window.innerWidth, window.innerHeight)
   }
 }
 

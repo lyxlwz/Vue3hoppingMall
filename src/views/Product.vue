@@ -112,7 +112,7 @@ window.addEventListener('mousewheel', (event) => {
 })
 
 onBeforeUnmount(() => {
-  window.removeEventListener('touchmove');
+  window.removeEventListener('mousewheel');
 })
 </script>
   

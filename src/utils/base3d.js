@@ -17,6 +17,13 @@ class Base3d {
 
     this.model; //模型
     this.plate; //玻璃展台
+    this.mixer; //混合器/物体的数据
+    this.clock = new THREE.Clock(); //初始化计时器
+
+    // 灯光一二三
+    this.spotlight1;
+    this.spotlight2;
+    this.spotlight3
 
     //初始化
     this.init()
@@ -108,12 +115,37 @@ class Base3d {
       loader.load(modelName, (gltf) => {
         //场景的第一个就是模型
         this.model = gltf.scene.children[0]
-        this.scene.add(this.model)
-        resolve(modelName + '模型添加成功')
         if ('bag2.glb' == modelName && !this.plate) {
-          this.plate = gltf.scene.children[4];
-          this.scene.add(this.plate)
+          this.plate = gltf.scene.children[5];
+          // this.scene.add(this.plate)
+
+          // 添加场景
+          this.scene.add(gltf.scene)
+          // 修改摄像头为模型的摄像头
+          this.camera = gltf.cameras[0]
+          // 调用动画
+          this.mixer = new THREE.AnimationMixer(gltf.scene.children[1])
+          // 生成动画动作
+          this.animateAction = this.mixer.clipAction(gltf.animations[0])
+          // 设置动画播放时长
+          this.animateAction.setDuration(20).setLoop(THREE.LoopOnce)
+          // 设置播放完成之后停止
+          this.animateAction.clampWhenFinished = true;
+          // 设置播放动画
+          this.animateAction.play()
+
+
+          // 设置灯光
+          this.spotlight1 = gltf.scene.children[2].children[0]
+          // 调节亮度
+          this.spotlight1.intensity = 1
+          this.spotlight2 = gltf.scene.children[3].children[0]
+          this.spotlight2.intensity = 1
+          this.spotlight3 = gltf.scene.children[4].children[0]
+          this.spotlight3.intensity = 1
         }
+        // this.scene.add(this.model)
+        resolve(modelName + '模型添加成功')
       })
     })
   }
@@ -124,6 +156,10 @@ class Base3d {
 
   // 渲染界面 
   render() {
+    // 获取变化时间--->形成时间差
+    let delta = this.clock.getDelta()
+    // 更新混合器
+    this.mixer && this.mixer.update(delta)
     this.renderer.render(this.scene, this.camera)
   }
   //渲染帧
